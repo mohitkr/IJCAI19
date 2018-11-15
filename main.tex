@@ -1,0 +1,325 @@
+%%%% ijcai18.tex
+
+\typeout{IJCAI-18 Instructions for Authors}
+
+% These are the instructions for authors for IJCAI-18.
+
+\documentclass{article}
+\pdfpagewidth=8.5in
+\pdfpageheight=11in
+% The file ijcai18.sty is the style file for IJCAI-18 (same as ijcai08.sty).
+\usepackage{ijcai18}
+
+% Use the postscript times font!
+\usepackage{times}
+\usepackage{soul}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[small]{caption}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{amsmath,amsthm,amsfonts}
+\usepackage{array}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{textcomp}
+\usepackage{tikz}
+\usetikzlibrary{shapes,backgrounds}
+\renewcommand{\arraystretch}{1.4}
+\graphicspath{ {images/} }
+% the following package is optional:
+%\usepackage{latexsym} 
+
+% Following comment is from ijcai97-submit.tex:
+% The preparation of these files was supported by Schlumberger Palo Alto
+% Research, AT\&T Bell Laboratories, and Morgan Kaufmann Publishers.
+% Shirley Jowell, of Morgan Kaufmann Publishers, and Peter F.
+% Patel-Schneider, of AT\&T Bell Laboratories collaborated on their
+% preparation.
+
+% These instructions can be modified and used in other conferences as long
+% as credit to the authors and supporting agencies is retained, this notice
+% is not changed, and further modification or reuse is not restricted.
+% Neither Shirley Jowell nor Peter F. Patel-Schneider can be listed as
+% contacts for providing assistance without their prior permission.
+
+% To use for other conferences, change references to files and the
+% conference appropriate and use other authors, contacts, publishers, and
+% organizations.
+% Also change the deadline and address for returning papers and the length and
+% page charge instructions.
+% Put where the files are available in the appropriate places.
+
+\usepackage{xcolor,colortbl}
+\newcommand{\mohit}[1]{{\bf \textcolor{blue}{{Mohit: #1}}}}
+\newcommand{\luc}[1]{{\bf \textcolor{red}{{Luc: #1}}}}
+\newcommand{\stefano}[1]{{\bf \textcolor{violet}{{Stefano: #1}}}}
+
+\usepackage{xspace}
+\newcommand{\learner}{\textsc{NL-CountOR}}
+\newcommand{\TX}{\textbf{X}\xspace}
+\newcommand{\TY}{\textbf{Y}\xspace}
+\newcommand{\TZ}{\textbf{Z}\xspace}
+\newcommand{\TP}{\textbf{P}\xspace}
+\newcommand{\TM}{\textbf{M}\xspace}
+\newcommand{\TN}{\textbf{N}\xspace}
+\newcommand{\TE}{\textbf{E}\xspace}
+\newcommand{\TF}{\textbf{F}\xspace}
+%\newcommand{\TH}{\textbf{H}}
+\newcommand{\Nonzero}[2]{\text{Nonzero}\!\left(#1,#2\right)}
+\newcommand{\Sum}[2]{\text{Sum}\!\left(#1,#2\right)}
+\newcommand{\MaxConsOne}[2]{\text{MaxConsOne}\!\left(#1,#2\right)}
+\newcommand{\MinConsOne}[2]{\text{MinConsOne}\!\left(#1,#2\right)}
+\newcommand{\MaxConsZero}[2]{\text{MaxConsZero}\!\left(#1,#2\right)}
+\newcommand{\MinConsZero}[2]{\text{MinConsZero}\!\left(#1,#2\right)}
+\newcommand{\Count}[3]{\text{Count}\!\left(#1,#2,#3\right)}
+
+\newcommand{\Nurses}{\texttt{Nurses}}
+\newcommand{\Shifts}{\texttt{Shifts}}
+\newcommand{\Days}{\texttt{Days}}
+\newcommand{\Nurse}{\texttt{Nurse}}
+\newcommand{\Shift}{\texttt{Shift}}
+\newcommand{\Day}{\texttt{Day}}
+
+%\usepackage{etoolbox}
+%\let\bbordermatrix\bordermatrix
+%\patchcmd{\bbordermatrix}{8.75}{4.75}{}{}
+%\patchcmd{\bbordermatrix}{\left(}{\left[}{}{}
+%\patchcmd{\bbordermatrix}{\right)}{\right]}{}{}
+
+\newcommand{\mc}[2]{\multicolumn{#1}{c}{#2}}
+\definecolor{Colored}{rgb}{0.85,0.85,0}
+\newcolumntype{a}{>{\columncolor{Colored}}c}
+
+
+\title{Learning Non-Linear Constraints using Tensors}
+\author{
+Mohit Kumar$^1$,
+Stefano Teso$^1$,
+Luc De Raedt$^1$
+\\ 
+$^1$ KU Leuven\\
+%
+\texttt{\{mohit.kumar,stefano.teso,luc.deraedt\}@cs.kuleuven.be}
+}
+% If your authors do not fit in the default space, you can increase it 
+% by uncommenting the following (adjust the "2.5in" size to make it fit
+% properly)
+% \setlength\titlebox{2.5in}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Many problems in operations research require that constraints be specified in the model. Determining the right constraints is a hard and laborsome task.
+We propose an approach to automate this process using artificial intelligence and machine learning principles. So far there has been only little work on learning constraints within the operations research community.
+We focus on personnel rostering and scheduling problems in which there are often past schedules available and show that it is possible to automatically learn  constraints from such examples. 
+To realize this, we adapted some techniques from the constraint programming community and  we have extended them in order to  cope with multidimensional examples. 
+The method uses a tensor representation of the example, which helps in capturing the dimensionality as well as the structure of the example, and applies tensor operations to find the constraints that are satisfied by the example. 
+To evaluate the proposed algorithm, we used constraints from the Nurse Rostering Competition and generated solutions that satisfy these constraints; these  solutions were then used as examples to learn constraints. Experiments demonstrate that the proposed algorithm is capable of producing human readable constraints that capture the underlying characteristics of the examples. 
+\end{abstract}
+
+
+\section{Introduction}
+\label{sec:intro}
+
+%\begin{itemize}
+%\item Do not 
+%\end{itemize}
+
+%
+%
+%%\begin{columns}
+%%\begin{column}{width=0.1\textwidth}
+%%X = 
+%%\end{column}
+%%\begin{column}{0.5\textwidth}
+%\begin{table}[t]
+%\begin{small}
+%    \begin{center} 
+%        \begin{tabular}{c|c|c|c|c|c|c|c|c|c|}
+%            \cline{2-10}
+%            \multicolumn{1}{l|}{}                  & \multicolumn{3}{c|}{$\text{Day}_1$} & \multicolumn{3}{c|}{$\text{Day}_2$} & \multicolumn{3}{c|}{$\text{Day}_3$} \\
+%            \cline{2-10}
+%            \multicolumn{1}{l|}{}                  & $\text{S}_1$     & $\text{S}_2$     & $\text{S}_3$     & $\text{S}_1$     & $\text{S}_2$     & $\text{S}_3$     & $\text{S}_1$     & $\text{S}_2$     & $\text{S}_3$ \\
+%            \hline
+%            \multicolumn{1}{|c|}{$\text{Nurse}_1$} &  1      &  0      &  0      & 0      & 1      & 0      & 0      & 1      & 0 \\
+%            \hline
+%            \multicolumn{1}{|c|}{$\text{Nurse}_2$} & 0      & 1      & 0      & 1      & 0      & 0      & 0      & 0      & 1 \\
+%            \hline
+%            \multicolumn{1}{|c|}{$\text{Nurse}_3$} & 0      & 0      & 1      & 0      & 0      & 0      & 1      & 0      & 0 \\
+%            \hline
+%            \multicolumn{1}{|c|}{$\text{Nurse}_4$} & 0      & 0      & 1      & 0      & 0      & 1      & 1      & 0      & 0 \\
+%            \hline
+%        \end{tabular}
+%    \end{center}
+%%    \caption{\label{tab:dataformat} Example nurse schedule with three dimensions: four nurses, three days, and three shifts per day.}
+%\end{small}
+%\end{table}
+%%\end{column}
+%%\end{columns}
+
+
+% \stefano{@Mohit: please go through the paper and remove all references to ``data''.  We work with examples, solutions, candidate constraints, constraints, and models.  ``Data'' is confusing.}
+
+Constraints are pervasive in practical scheduling and rostering problems. For example, hospitals usually generate a weekly schedule for their nurses based on constraints like the maximum number of working days for a nurse. As the number of nurses and the complexity of the constraints increases, however, generating the schedule manually becomes impossible.  Organizations may hire domain experts to manually model the constraints, but this is expensive and time consuming. A tempting alternative is to employ constraint learning~\cite{de2018learning} to automatically induce the constraints from examples of past schedules.
+
+Unfortunately, existing constraint learners are not tailored for this setting.  Classical approaches like Conacq~\cite{Bessiere} and Inductive Logic Programming tools~\cite{MUGGLETON1994629} focus on logical variables only,  while scheduling constraints often include numerical terms.  Very few approaches can handle this case.  TaCLe~\cite{kolb2017learning} focuses on 2-D tabular data (Excel spreadsheets), while schedules are inherently multi-dimensional. To see what we mean, consider the nurse schedule shown in Table~\ref{tab:dataformat}.  For each combination of nurse, day and shift the value of 1 represents that the nurse worked in that particular shift of that day, while a 0 means the nurse didn't work.  It is easy to see that nurses, days, and shifts are independent of each and behave like different dimensions.  ModelSeeker~\cite{beldiceanu2012model} is the only method that can handle such multi-dimensional structures, but it is restricted to global constraints only.
+
+%Learning constraints like ``the minimum/maximum number of people working each day'' is not trivial.  Doing so requires to check, for each nurse and day whether they worked in any of the 3 shifts, and represent it by 1 or 0, which is like taking a vector of size 3 (corresponding to the 3 shifts) and reducing it to a scalar value of 1 or 0\stefano{@Mohit: $\gets$ very unclear}. Existing constraint learners are not equipped for dealing with this.
+
+To address this issue, we propose COnstraint UsiNg TensORs (\learner{}), a novel constraint learning approach that leverages tensors for capturing the inherent structure and dimensionality of the schedules.  In order to learn the constraints, \learner{} extracts and enumerates all (meaningful) slices of the input schedule(s), aggregates them through tensor operations, and then computes bounds for the aggregates to generate candidate numerical constraints.  Some simple filtering strategies are applied to prune irrelevant and trivially satisfied candidates.  When increasing the number of dimensions in the example, the rank of the tensor representing the example will increase accordingly but the proposed method \learner{} remains unchanged, so \learner{} can easily scale to large and complex schedules. The number of candidate sub-tensors however increases exponentially with the number of dimensions of $\TX$.
+
+We make the following key contributions:
+%
+(\textbf{1}) A tensor representation of schedules and constraints appropriate for real-world personnel rostering problems.
+%
+(\textbf{2}) A novel constraint learning algorithm, \learner{}, which uses tensor extraction and aggregation operations to learn the constraints hidden in the input schedules.
+%and also filter out the constraints which doesn't make much sense.
+%
+(\textbf{3}) An empirical evaluation on real-world nurse rostering problems.
+%
+%(\textbf{4}) An extension of \learner{} to the case where additional background knowledge (e.g. nurse skill levels) are available.
+
+The paper is structured as follows. We present the method in Section~\ref{sec:method}, followed by evaluation on example instances  in Section~\ref{sec:experiments}. We conclude with some final remarks in Section~\ref{sec:conclusion}.
+
+
+\section{Method}
+\label{sec:method}
+
+We looked into most of the benchmark scheduling problems prevailing in the operations research community, some examples are Nurse Rostering, Course Timetabling, Home Care Scheduling and Project Scheduling. Most of the constraints observed in these problems are non-linear in nature but share some kind of structure, so we did some deep dive and came up with a mathematical structure to represent most of these constraints. 
+
+Let's see this running example before we define this structure. Consider a Nurse rostering model with the following variables.
+%
+\begin{align*}
+  \TX_{n,s,d} = & \begin{cases}
+    1, & \text{if nurse $n$ is allocated shift $s$ on day $d$}\\
+    0, & \text{otherwise}.
+  \end{cases}\\
+  \textbf{H}_{n} = & \begin{cases}
+    1, & \text{if nurse $n$ is high skilled}.\\
+    0, & \text{otherwise}.
+  \end{cases}\\
+  \textbf{M}_{n} = & \begin{cases}
+    1, & \text{if nurse $n$ is medium skilled}.\\
+    0, & \text{otherwise}.
+  \end{cases}\\
+  \textbf{L}_{n} = & \begin{cases}
+    1, & \text{if nurse $n$ is low skilled}.\\
+    0, & \text{otherwise}.
+  \end{cases}\\
+  \textbf{R}_{s,d} =
+    & \; \text{Minimum number of high or medium skilled}\\ 
+    & \; \text{nurses required in shift $s$ on day $d$}
+\end{align*}
+%
+Considering these variables, a constraint like "the minimum number of high or medium skilled nurses working in a shift" can be represented as:
+\begin{equation}
+\label{eq:const}
+\sum_{n} \TX_{n,s,d} \times \textbf{H}_{n} + \sum_{n} \TX_{n,s,d} \times \textbf{M}_{n} \geq \textbf{R}_{s,d} \quad \forall s,d
+\end{equation}
+%
+A generic version of the constraint above is represented below (Eq~\ref{eq:struct}).
+Let $\mathbb{X}$ represents the set of all tensors \stefano{@Mohit: maybe it's best to differentiate between tensors, written \TX, and sets of tensors, say, $\mathbb{X}$?} $\TP(\mathbb{X})$ represents the power set of $\mathbb{X}$ and $\TE,\TF \subseteq \TP(\mathbb{X})$.
+%Let $j$ represents the index set for $\TE$ and $i$ represents the index set for elements in \TE.
+%$J \subseteq \{1,2,...,|P|\}$.
+\begin{multline}
+\label{eq:struct}
+	\displaystyle\sum\limits_{\textbf{e} \in \TE}(\sum_{S_e}\prod_{\TY \in \textbf{e}} \TY_{M_{e,y}}) 
+	-\sum\limits_{\textbf{f} \in \TF}(\sum_{S_f}\prod_{\TY \in \textbf{f}} \TY_{M_{f,y}}) \le \TZ_{M}\\
+	\forall \bigcup_{l \in E \cup F}(\bigcup_{\TY \in \textbf{l}} M_{l,y} / S_l) \bigcup M
+\end{multline}
+Each constraint in Eq~\ref{eq:struct} can be uniquely identified by the following variables:
+\begin{itemize}
+\item $E$
+\item $F$
+\item $Z$
+\item $M_{l,y} \quad \forall l \in E \bigcup F \quad and\quad  y \in l$
+\item $S_{l} \quad \forall l \in E \bigcup F$
+\item $M$
+\end{itemize}
+In other words, by enumerating through the various possible values of these variables, we can enumerate through all the possible constraints. For example, choosing the following assignments will give us the constraint represented by Eq~\ref{eq:const}
+\begin{align*}
+&E=\emptyset\\
+&F=\{(X,H),(X,M)\}\\
+&Z=R\\
+&M_{(X,H),X}=M_{(X,M),X}=\{n,s,d\}\\
+&M_{(X,H),H}=M_{(X,M),M}=\{n\}\\
+&S_{(X,H)}=S_{(X,M)}=\{n\}\\
+&M=\{s,d\}
+\end{align*}
+Enumerating through all the possible combinations is not a feasible solution as the number of combinations for this structure is huge and enumerating through all the possibilities will not scale for the real world problems. In this paper we define a two step solution to tackle this problem:
+
+\subsection{Signatures}
+Signatures are a pro active measure to refine the set of constraints to be enumerated. We define the following conditions which must be satisfied by a constraint in order for it to be a valid constraint. Let $N_y$ represents the dimension set of \TY
+\begin{itemize}
+            \item $M_{l,y} \subseteq N_y \quad \forall l \in E \bigcup F$
+            \item $S_{l} \subseteq \bigcup_{\TY \in l} M_{l,y}$ for all $l \in E \bigcup F$
+            \item $\bigcup_{\TY \in l} M_{l,y} / S_{l} = \bigcup_{\TY \in l'} M_{l,y} / S_{l'}\quad \forall l,l' \in E \bigcup F$
+            \item $\bigcup_{\TY \in l} M_{l,y} / S_{l} \subseteq M$ or
+            $\bigcup_{\TY \in l} M_{l,y} / S_{l} \supseteq M\quad \forall l \in E \bigcup F$
+            
+            \item $M_{l,y} = N_y \quad \forall l \in E \bigcup F$
+            \item $\TY \ne \TY'$ for any $\TY,\TY' \in l \quad \forall l \in E \bigcup F$
+            \item $|E|+|F| \le 2$
+            \item $|l| \le 2\quad \forall l \in E \bigcup F$
+            % \item $a-b \le 0$
+\end{itemize}
+
+\subsection{Intelligent Enumeration}
+For enumerating intelligently we make a couple of assumptions, at the end we will also discuss how the algorithm will change if these assumptions don't hold.
+\begin{itemize}
+\item Numbers in the tensors are either all positive or all negative. In other words, a tensor can't have both positive and negative numbers
+\item Mod of the numbers in a tensor is all greater than or equal to 1
+\end{itemize}
+With the first assumption in place and given the structure of the constraints that we enumerate using Eq~\ref{eq:struct}, we can safely assume that all the tensors have only positive numbers. This is because even if we have any negative data tensor \textbf{T}, we can transform it to \textbf{-T} for our algorithm without loosing any information as our equation considers both \textbf{T} and \textbf{-T} when enumerating through constraints.
+
+With these assumptions we can now define the enumeration process. We use the following three properties to define an intelligent way to enumerate:
+
+\begin{equation}
+t_1 \not\le t \implies t_1 + t_2 \not\le t \quad \forall t_2 \geq 0
+\end{equation} 
+
+\begin{equation}
+t_1 \not\le t \implies t_1 * t_2 \not\le t \quad \forall t_2, s.t. |t_2| \geq 1
+\end{equation} 
+
+\begin{equation}
+t_1 \not\ge t \implies t_1 * t_2 \not\ge t \quad \forall t_2, s.t. |t_2| \le 1
+\end{equation} 
+\begin{figure}[tb]
+    \centering
+\includegraphics[width=0.3\textwidth]{images/constraintTree.png}
+    \caption{\label{fig:constraintTree} Constraint Dependency Tree: The root represents the most general constraint and as we keep going down the constraints become more specific.}
+\end{figure}
+We use this idea to define a constraint dependency tree as shown in Fig~\ref{fig:constraintTree}. A directed edge between two nodes represents entailment. For example, in Fig~\ref{fig:constraintTree}, $C_2$ entails $C_1$ which means whenever $C_1$ is satisfied $C_2$ will also be satisfied, which also means if $C_2$ is not satisfied then $C_1$ is not satisfied either.
+\\
+There can be two approaches for enumeration: (1) Top Down or (2) Bottom Up.
+ 
+\textbf{Top Down:} In the top down approach, we start with the most general constraint, if it's satisfied then we don't need to check any of it's descendents. For example, in Fig~\ref{fig:constraintTree}, we start with checking the validity of $C_1$, if it is satisfied we don't need to check any other constraints in the tree as they would be satisfied as well, and if it's not then we check each of it's children one by one and repeat the process.
+
+\textbf{Bottom Up:} Bottom up works on the similar idea as the top down approach, here we start with the most specific constraint, in our case it would be $C_5$ or $C_6$, if it is not satisfied we don't need to check any ancestors of that constraint as it won't be satisfied either, but if it's satisfied we check each parent one by one and repeat the process.
+
+We are going to discuss bottom up approach in the algorithm, but we can easily transform the algorithm to consider top down approach. So, to use the bottom up approach we always start with the most specific constraint and if it's not satisfied we can safely discard all the constraints which are ancestors of that constraint. We can easily represent any constraint using the set of variables defined earlier ($\{E, F, Z, M_{l,y}, S_l, M\}$). So let's see how does the most specific constraint look like based on our assumptions and signatures.
+\begin{itemize}
+\item $|F| = 2$ and $E=\phi$
+\item $|l|=2 \quad \forall l \in E \bigcup F$ 
+\item $S_{l} = \bigcup_{\TY \in l} M_{l,y} \quad \forall l \in E \bigcup F$
+\end{itemize}
+Given two nodes $\{E, F, Z, M_{l,y}, S_l, M\}$ and $\{E', F', Z', M'_{l,y}, S'_l, M'\}$. The second one will pe a parent of the first one if and only if at least one of the following properties is satisfied keeping everything else unchanged.
+\begin{itemize}
+\item $|F'| < |F|$
+\item $|E'| > |E|$
+\item $\exists l'\in E \bigcup F \quad s.t. \quad  |l'| < |l|$ 
+\item $\exists S'_l\in E \bigcup F \quad s.t. \quad S'_l \subset S_l$
+\end{itemize}
+
+\bibliographystyle{unsrt}
+\bibliography{ijcai18}
+\end{document}
