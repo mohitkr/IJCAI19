@@ -226,20 +226,20 @@ Considering these variables, a constraint like "the minimum number of high or me
 \end{equation}
 %
 A generic version of the constraint above is represented below (Eq~\ref{eq:struct}).
-Let $\mathbb{X}$ represents the set of all tensors \stefano{@Mohit: maybe it's best to differentiate between tensors, written \TX, and sets of tensors, say, $\mathbb{X}$?} $\TP(\mathbb{X})$ represents the power set of $\mathbb{X}$ and $\TE,\TF \subseteq \TP(\mathbb{X})$.
+Let $\mathbb{X}$ represents the set of all tensors 
+%\stefano{@Mohit: maybe it's best to differentiate between tensors, written \TX, and sets of tensors, say, $\mathbb{X}$?} 
+$\TP(\mathbb{X})$ represents the power set of $\mathbb{X}$ and $\TE,\TF \subseteq \TP(\mathbb{X})$.
 %Let $j$ represents the index set for $\TE$ and $i$ represents the index set for elements in \TE.
 %$J \subseteq \{1,2,...,|P|\}$.
 \begin{multline}
 \label{eq:struct}
 	\displaystyle\sum\limits_{\textbf{e} \in \TE}(\sum_{S_e}\prod_{\TY \in \textbf{e}} \TY_{M_{e,y}}) 
-	-\sum\limits_{\textbf{f} \in \TF}(\sum_{S_f}\prod_{\TY \in \textbf{f}} \TY_{M_{f,y}}) \le \TZ_{M}\\
-	\forall \bigcup_{l \in E \cup F}(\bigcup_{\TY \in \textbf{l}} M_{l,y} / S_l) \bigcup M
+	-\sum\limits_{\textbf{e'} \in \TE'}(\sum_{S_{e'}}\prod_{\TY \in \textbf{e'}} \TY_{M_{e',y}}) \le \TZ_{M}\\
+	\forall \bigcup_{l \in E \cup E'}(\bigcup_{\TY \in \textbf{l}} M_{l,y} / S_l) \bigcup M
 \end{multline}
 Each constraint in Eq~\ref{eq:struct} can be uniquely identified by the following variables:
 \begin{itemize}
-\item $E$
-\item $F$
-\item $Z$
+\item $E, E', Z$
 \item $M_{l,y} \quad \forall l \in E \bigcup F \quad and\quad  y \in l$
 \item $S_{l} \quad \forall l \in E \bigcup F$
 \item $M$
@@ -265,12 +265,28 @@ Signatures are a pro active measure to refine the set of constraints to be enume
             \item $\bigcup_{\TY \in l} M_{l,y} / S_{l} \subseteq M$ or
             $\bigcup_{\TY \in l} M_{l,y} / S_{l} \supseteq M\quad \forall l \in E \bigcup F$
             
-            \item $M_{l,y} = N_y \quad \forall l \in E \bigcup F$
+%            \item $M_{l,y} = N_y \quad \forall l \in E \bigcup F$
             \item $\TY \ne \TY'$ for any $\TY,\TY' \in l \quad \forall l \in E \bigcup F$
             \item $|E|+|F| \le 2$
             \item $|l| \le 2\quad \forall l \in E \bigcup F$
             % \item $a-b \le 0$
 \end{itemize}
+If we apply just the last two signatures to Eq~\ref{eq:struct}, the structure reduces to:
+\begin{equation}
+\label{eq:one}
+	\displaystyle\sum_{S} \TX_{M_1} *\TY_{M_2}
+	+\sum_{S'} \TX'_{M'_1} *\TY'_{M'_2} \le \TZ_{M}
+\end{equation}
+\begin{equation}
+\label{eq:two}
+	\displaystyle\sum_{S} \TX_{M_1} *\TY_{M_2}
+	+\sum_{S'} \TX'_{M'_1} *\TY'_{M'_2} \geq \TZ_{M}
+\end{equation}
+\begin{equation}
+\label{eq:three}
+	\displaystyle\sum_{S} \TX_{M_1} *\TY_{M_2}
+	-\sum_{S'} \TX'_{M'_1} *\TY'_{M'_2} \le \TZ_{M}
+\end{equation}
 
 \subsection{Intelligent Enumeration}
 For enumerating intelligently we make a couple of assumptions, at the end we will also discuss how the algorithm will change if these assumptions don't hold.
