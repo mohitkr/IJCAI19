@@ -358,14 +358,14 @@ If we apply just the last two signatures to Eq~\ref{eq:struct}, the structure re
 \end{equation}
 
 \subsection{Intelligent Enumeration}
-For enumerating intelligently we make a couple of assumptions, at the end we will also discuss how the algorithm will change if these assumptions don't hold.
+This subsection presents an intelligent way to enumerate through the constraints represented by Eq~\ref{eq:struct}. First we make some assumptions to define a simple algorithm which gives an idea of how this method works, in the further subsections we keep on relaxing these assumptions and explain how the algorithm changes for the new structure.
+The assumptions we intially make are:
 \begin{itemize}
-\item Numbers in the tensors are either all positive or all negative. In other words, a tensor can't have both positive and negative numbers
-\item Mod of the numbers in a tensor is all greater than or equal to 1
+\item Mod of the numbers in a tensor is always greater than or equal to 1
+\item Each tensor has only non-negative entry.
 \end{itemize}
 % With the first assumption in place and given the structure of the constraints that we enumerate using Eq~\ref{eq:struct}, we can safely assume that all the tensors have only positive numbers. This is because even if we have any negative data tensor \textbf{T}, we can transform it to \textbf{-T} for our algorithm without loosing any information as our equation considers both \textbf{T} and \textbf{-T} when enumerating through constraints.
-
-With these assumptions we can now define the enumeration process. We use the following three properties to define an intelligent way to enumerate:
+Combining both the assumptions we can say that each number in each tensor must be greater than or equal to 1. We use the following two properties to define an intelligent way to enumerate:
 
 \begin{equation}
 t_1 \not\le t \implies t_1 + t_2 \not\le t \quad \forall t_2 \geq 0
@@ -409,14 +409,14 @@ Given two nodes $\{E, \overline{\TM}_i,S_{i}, Z, \TM\}$ and $\{E', \overline{\TM
 
 \subsection{Total Order}
 With the tree structure defined above we can go ahead and start searching starting from the most specific layer and moving down layer by layer. The only problem is that multiple nodes can have the same child. 
-To see this let us consider a very simple example, let's say we have 3 tensors $A, B, C$ each of dimension $m*n$. There are multiple possibilities for the most general node:
+For example, consider 3 tensors $A, B$ and $C$ each of dimension $m*n$. There are multiple possibilities for the most general node:
 \begin{multline*}
     0 \le A,\, 0 \le B,\, 0\le C,\, 
     0 \le A_{m,n},\, 0 \le B_{m,n},\, 0\le C_{m,n},\\
     0 \le A_m,\, 0 \le B_m,\, 0\le C_m,\,
     0 \le A_n,\, 0 \le B_n,\, 0\le C_n
 \end{multline*}
-Let us see this part of the tree considering the first node:
+Consider a small part of the tree using the first node:
 \begin{tikzpicture}[sibling distance=.25cm]
 \Tree [.$0\le A$
         [.$B\le A$
@@ -428,12 +428,17 @@ Let us see this part of the tree considering the first node:
 We can see that multiple nodes can take us to the same children. To break this symmetry we define an ordering on all the variables as well as operations performed to get to the child node, this will ensure that a node will never have two parents, we will prove it later.
 \begin{itemize}
     \item A random ordering is defined for the tensors, for instance we can define $A \prec B \prec C$.
-    \item Similarly we define the ordering of dimensions for each tensor, with the first dimension preceding the second and so on. In our example it would be $m \prec n$.
+    \item Similarly we define the ordering of dimensions for each tensor, with the first dimension preceding the second and so on. In our example it would be $m \prec n$ for each tensor.
     \item The final ordering is defined on the operations performed to reach the child node. $\text{Summation over terms} \prec \text{Product over terms} \prec \text{Summation over dimensions}$
 \end{itemize}
-Now using these orderings, we add one more condition when generating child of a node. A node cannot use a preceding tensor, dimension or operation to generate a child. This simple rule can eliminate redundancy from the graph. For example in the figure above, now $C\le A$ cannot generate $B+C\le A$ because once we add $C$ to the inequality we can't add $B$
-\\
-\textbf{More Complex Setting:} Let us now see what happens if we remove the assumption that "mod of the numbers in a tensor is all greater than or equal to one". In this case we divide our tensor set into three categories: (1) Where mod of each number is greater than or equal to 1, denoted by $P_1$, (2) Where mod of each number is less than or equal to 1, denoted by $P_2$, (3) Where mod of some numbers are less than 1 and some are greater than 1, denoted by $P_3$.
+By using these orderings when generating a child for a node we can remove the redundancy. 
+For each node we have a list (L) of highest order tensor, dimension and operation used on the root node to reach that node. For our example above, $L(B+C \le A)=\{C,\text{summation over terms}\}$
+To generate a child for this node, one can only use a tensor, dimension or operation which has higher or equal order than the highest order tensor, dimension and operation in L.
+This rule eliminates redundancy from the graph. For example in the figure above, now $C\le A$ cannot generate $B+C\le A$ because once we add $C$ to the inequality we can't add $B$ as $B \prec C$
+
+\subsubsection{More Complex Setting}
+%\textbf{More Complex Setting:} 
+Let us now see what happens if we remove the first assumption which was "mod of the numbers in a tensor is all greater than or equal to one". In this case we divide our tensor set into three categories: (1) Where mod of each number is greater than or equal to 1, denoted by $P_1$, (2) Where mod of each number is less than or equal to 1, denoted by $P_2$, (3) Where mod of some numbers are less than 1 and some are greater than 1, denoted by $P_3$.
 \\
 Taking a product with any tensor in $P_1$ will give us a child node, while multiplying with a tensor in $P_2$ will give us a parent node and a product with a tensor in $P_3$ will give us a sibling.
 % We split the product operations into three different operations: We call it $Prod_1$ if the tensor used is from $P_1$, $Prod_1$ if the tensor used is from $P_2$ and $Prod_3$ for tensors from $P_3$.  
@@ -445,13 +450,43 @@ So whenever we add a new term to a node, it must start with the product of all t
 The new precedence relationship among the operators is:
 $\text{Summation over terms} \prec \text{Removing a bad tensor} \prec \text{Multiplying a good tensor} \prec \text{Summation over dimensions}$
 
+
 \subsection{Generalization}
-In this subsection we will define a generalization for the constraint representation in Eq~\ref{eq:struct} and see how the algorithm changes. The main idea behind this generalization is to be able to use negative tensors and subtractions. So if we take Eq~\ref{eq:struct} and allow the possibility of taking negation of a tensor we get the following generalization:
-\begin{multline}
-\label{eq:genStruct}
+Before discussing the removal of the second assumption let us consider a generalization of the structure defined in Eq~\ref{eq:struct}. The main idea behind this generalization is to be able to use negative tensors and subtractions. If we take Eq~\ref{eq:struct} and allow the possibility of taking negation of a tensor we get the following generalization:
+%\begin{equation}
+%	\displaystyle\sum\limits_{\overline{\TX}_i \in \TE}\bigotimes_{\textbf{S}_i}(\overline{\TX}_i,\overline{\TM}_i) \le \TZ_{M}
+%\end{equation}
+%
+%\begin{equation}
+%	\displaystyle-\sum\limits_{\overline{\TX}_i \in \TE}\bigotimes_{\textbf{S}_i}(\overline{\TX}_i,\overline{\TM}_i) \le \TZ_{M}
+%\end{equation}
+%
+%\begin{equation}
+%	\displaystyle\sum\limits_{\overline{\TX}_i \in \TE}\bigotimes_{\textbf{S}_i}(\overline{\TX}_i,\overline{\TM}_i) \geq \TZ_{M}
+%\end{equation}
+%
+%\begin{equation}
+%	\displaystyle-\sum\limits_{\overline{\TX}_i \in \TE}\bigotimes_{\textbf{S}_i}(\overline{\TX}_i,\overline{\TM}_i) \geq \TZ_{M}
+%\end{equation}
+
+\begin{equation}
+\label{eq:general1}
+	\displaystyle\sum\limits_{\overline{\TX}_i \in \TE}\bigotimes_{\textbf{S}_i}(\overline{\TX}_i,\overline{\TM}_i) - 
+	\sum\limits_{\overline{\TX}'_i \in \TE'}\bigotimes_{\textbf{S}'_i}(\overline{\TX}'_i,\overline{\TM}'_i) \le \TZ_{M}
+\end{equation}
+
+\begin{equation}
+\label{eq:general2}
 	\displaystyle\TZ_{M} \le \sum\limits_{\overline{\TX}_i \in \TE}\bigotimes_{\textbf{S}_i}(\overline{\TX}_i,\overline{\TM}_i) - 
-	\sum\limits_{\overline{\TX}'_i \in \TE'}\bigotimes_{\textbf{S}'_i}(\overline{\TX}'_i,\overline{\TM}'_i) \le \TZ'_{M'}\\ \forall \bigcup_{E \bigcup E'}(\bigcup_{\TM \in \overline{\TM}_i} \TM / \textbf{S}_i) \bigcup M  \bigcup M' 
-\end{multline}
+	\sum\limits_{\overline{\TX}'_i \in \TE'}\bigotimes_{\textbf{S}'_i}(\overline{\TX}'_i,\overline{\TM}'_i) 
+\end{equation}
+
+%\begin{multline}
+%\label{eq:genStruct}
+%	\displaystyle\TZ_{M} \le \sum\limits_{\overline{\TX}_i \in \TE}\bigotimes_{\textbf{S}_i}(\overline{\TX}_i,\overline{\TM}_i) - 
+%	\sum\limits_{\overline{\TX}'_i \in \TE'}\bigotimes_{\textbf{S}'_i}(\overline{\TX}'_i,\overline{\TM}'_i) \le \TZ'_{M'}\\ \forall \bigcup_{E \bigcup E'}(\bigcup_{\TM \in \overline{\TM}_i} \TM / \textbf{S}_i) \bigcup M  \bigcup M' 
+%\end{multline}
+For now let us focus on learning constraints defined by the structure in Eq~\ref{eq:general1}, we will update our algorithm later to include Eq~\ref{eq:general2}.   
 If a tensor \TX is in any element of \TE it's being considered as is while if it belongs to any element of \TE' it's negation is being considered. \TX can also belong to both \TE and \TE', in which case it's being considered in both the states positive and it's negation. 
 Now let's say we have a tensor in our data set with all numbers non-positive, then we can take a negation and make it non-negative and use this transformed tensor in our algorithm without any loss of information because the enumeration is going to consider both the tensor and it's negation as explained above.
 So we can relax one more assumption we had, we assumed that each tensor must have all numbers non-negative, but now we can also have tensors that have all numbers non-positive. To do the intelligent enumeration, we will have to re-define the concept of most general node and the rules to go to a child node.
@@ -480,7 +515,6 @@ A negative term can be made more general by doing one of the following:
 \item $\exists l'\in F \quad s.t. \quad  |l'| > |l|$, removing products 
 \item $\exists S'_l\in F \quad s.t. \quad S'_l \supseteq S_l$, summing over less dimensions
 \end{itemize}
-\\
 We define a node $n'$  to be a child of another node $n$ if and only if either $n'$ has a positive node that is child of another positive node in $n$ or $n'$ has a negative node that is child of another negative node in $n$ but never both.
 
 

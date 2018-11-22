@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.10.15)  15 NOV 2018 15:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.10.15)  22 NOV 2018 15:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1262,46 +1262,89 @@ File: tikzlibrarybackgrounds.code.tex 2013/07/18 v3.0.1a (rcs-revision 1.3)
 \pgf@layerbox@background=\box62
 \pgf@layerboxsaved@background=\box63
 )
+(/usr/share/texlive/texmf-dist/tex/latex/tikz-qtree/tikz-qtree.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tikz-qtree/pgftree.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tikz-qtree/pgfsubpic.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tikz-qtree/pgfsubpic.tex
+\pgf@subpicminx=\dimen191
+\pgf@subpicminy=\dimen192
+\pgf@subpicmaxx=\dimen193
+\pgf@subpicmaxy=\dimen194
+))
+(/usr/share/texlive/texmf-dist/tex/latex/tikz-qtree/pgftree.tex
+\levelsep=\dimen195
+\subtreesep=\dimen196
+\smuggle@levelsep=\dimen197
+\smuggle@subtreesep=\dimen198
+\this@levelsep=\dimen199
+\this@subtreesep=\dimen256
+\pgftree@childx=\dimen257
+\pgftree@savechildx=\dimen258
+\pgftree@childy=\dimen259
+\pgftree@savechildy=\dimen260
+\pgftree@childi=\count147
+\pgftree@savechildi=\count148
+\pgftree@level=\count149
+\pgftree@depth=\dimen261
+\pgf@subpic@hbox@children=\box64
+\pgf@subpic@minx@children=\dimen262
+\pgf@subpic@miny@children=\dimen263
+\pgf@subpic@maxx@children=\dimen264
+\pgf@subpic@maxy@children=\dimen265
+\pgftree@lastchildx=\dimen266
+\pgftree@lastchildy=\dimen267
+))
+(/usr/share/texlive/texmf-dist/tex/latex/tikz-qtree/tikz-qtree.tex
+\@result=\toks53
+\child@list=\toks54
+\root@node=\toks55
+))
+(/usr/share/texlive/texmf-dist/tex/latex/tikz-qtree/tikz-qtree-compat.sty
+\@qrooflabel=\toks56
+)
 (/usr/share/texlive/texmf-dist/tex/latex/colortbl/colortbl.sty
 Package: colortbl 2012/02/13 v1.0a Color table columns (DPC)
-\everycr=\toks53
+\everycr=\toks57
 \minrowclearance=\skip57
 )
 (/usr/share/texlive/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
-) (./main.aux)
+) (./main.aux
+
+LaTeX Warning: Label `eq:struct' multiply defined.
+
+)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 115.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 115.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 116.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 116.
 
-
-(/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
+ (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 115.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 116.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
-\AtBeginShipoutBox=\box64
-Package hyperref Info: Link coloring OFF on input line 115.
+\AtBeginShipoutBox=\box65
+Package hyperref Info: Link coloring OFF on input line 116.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -1309,11 +1352,11 @@ Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count147
+\c@section@level=\count150
 )
-LaTeX Info: Redefining \ref on input line 115.
-LaTeX Info: Redefining \pageref on input line 115.
-LaTeX Info: Redefining \nameref on input line 115.
+LaTeX Info: Redefining \ref on input line 116.
+LaTeX Info: Redefining \pageref on input line 116.
+LaTeX Info: Redefining \nameref on input line 116.
 
 (./main.out) (./main.out)
 \@outlinefile=\write4
@@ -1325,17 +1368,17 @@ Package caption Info: End \AtBeginDocument code.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count148
-\scratchdimen=\dimen191
-\scratchbox=\box65
-\nofMPsegments=\count149
-\nofMParguments=\count150
-\everyMPshowfont=\toks54
-\MPscratchCnt=\count151
-\MPscratchDim=\dimen192
-\MPnumerator=\count152
-\makeMPintoPDFobject=\count153
-\everyMPtoPDFconversion=\toks55
+\scratchcounter=\count151
+\scratchdimen=\dimen268
+\scratchbox=\box66
+\nofMPsegments=\count152
+\nofMParguments=\count153
+\everyMPshowfont=\toks58
+\MPscratchCnt=\count154
+\MPscratchDim=\dimen269
+\MPnumerator=\count155
+\makeMPintoPDFobject=\count156
+\everyMPtoPDFconversion=\toks59
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
@@ -1356,67 +1399,67 @@ ABD: EveryShipout initializing macros
 Package pgfplots Warning: running in backwards compatibility mode (unsuitable t
 ick labels; missing features). Consider writing \pgfplotsset{compat=1.13} into 
 your preamble.
- on input line 115.
+ on input line 116.
 
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 118.
-LaTeX Font Info:    Try loading font information for U+msa on input line 118.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 119.
+LaTeX Font Info:    Try loading font information for U+msa on input line 119.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 118.
+LaTeX Font Info:    Try loading font information for U+msb on input line 119.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 118.
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 118.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 119.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 119.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 118.
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 119.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omspcr.fd
 File: omspcr.fd 
 )
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 118.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 119.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 171.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 172.
 
 
-LaTeX Warning: Citation `de2018learning' on page 1 undefined on input line 171.
+LaTeX Warning: Citation `de2018learning' on page 1 undefined on input line 172.
 
 
 
-LaTeX Warning: Citation `Bessiere' on page 1 undefined on input line 173.
+LaTeX Warning: Citation `Bessiere' on page 1 undefined on input line 174.
 
 
 LaTeX Warning: Citation `MUGGLETON1994629' on page 1 undefined on input line 17
-3.
+4.
 
 
 LaTeX Warning: Citation `kolb2017learning' on page 1 undefined on input line 17
-3.
+4.
 
 
-LaTeX Warning: Reference `tab:dataformat' on page 1 undefined on input line 173
+LaTeX Warning: Reference `tab:dataformat' on page 1 undefined on input line 174
 .
 
 
 LaTeX Warning: Citation `beldiceanu2012model' on page 1 undefined on input line
- 173.
+ 174.
 
 
 LaTeX Warning: Reference `sec:experiments' on page 1 undefined on input line 19
-0.
+1.
 
 
-LaTeX Warning: Reference `sec:conclusion' on page 1 undefined on input line 190
+LaTeX Warning: Reference `sec:conclusion' on page 1 undefined on input line 191
 .
 
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
@@ -1424,62 +1467,84 @@ LaTeX Warning: Reference `sec:conclusion' on page 1 undefined on input line 190
 
 
 ]
-LaTeX Font Info:    Try loading font information for TS1+ptm on input line 242.
+LaTeX Font Info:    Try loading font information for TS1+ptm on input line 316.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 259.
-
-<images/constraintTree.png, id=39, 241.90375pt x 201.75375pt>
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 328.
+ [2]
+<images/constraintTree.png, id=73, 241.90375pt x 201.75375pt>
 File: images/constraintTree.png Graphic file (type png)
 
 <use images/constraintTree.png>
-Package pdftex.def Info: images/constraintTree.png used on input line 314.
+Package pdftex.def Info: images/constraintTree.png used on input line 383.
 (pdftex.def)             Requested size: 151.76854pt x 126.58525pt.
- [2]
-Underfull \hbox (badness 10000) in paragraph at lines 331--332
-\OT1/ptm/m/n/10 Given two nodes $\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 E; F; Z; M[
-]; S[]; M\OMS/cmsy/m/n/10 g$ \OT1/ptm/m/n/10 and
+
+Underfull \hbox (badness 10000) in paragraph at lines 402--403
+\OT1/ptm/m/n/10 Given two nodes $\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 E; [][]; S[
+]; Z; []\OMS/cmsy/m/n/10 g$ \OT1/ptm/m/n/10 and
  []
 
 
-Underfull \hbox (badness 1910) in paragraph at lines 331--332
-\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 E[]; F[]; Z[]; M[]; S[]; M[]\OMS/cmsy/m/n/10
- g$\OT1/ptm/m/n/10 . The sec-ond one will pe a
+Underfull \hbox (badness 1168) in paragraph at lines 402--403
+\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 E[]; [][]; S[]; Z[]; [][]\OMS/cmsy/m/n/10 g$
+\OT1/ptm/m/n/10 . The later will be a child of the
  []
 
 
-Underfull \hbox (badness 1331) in paragraph at lines 331--332
-\OT1/ptm/m/n/10 fol-low-ing prop-er-ties is sat-is-fied keep-ing ev-ery-thing e
-lse
+Underfull \hbox (badness 1152) in paragraph at lines 418--429
+\OT1/ptm/m/n/10 Consider a small part of the tree us-ing the first node:
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 432--433
+[]\OT1/ptm/m/n/10 The fi-nal or-der-ing is de-fined on the op-er-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 432--433
+\OT1/ptm/m/n/10 a-tions per-formed to reach the child node.
+ []
+
+
+Underfull \hbox (badness 6428) in paragraph at lines 432--433
+[] \OMS/cmsy/m/n/10 ^^^ [] ^^^
+ []
+
+[3 <./images/constraintTree.png>]
+Underfull \hbox (badness 3039) in paragraph at lines 450--452
+\OT1/ptm/m/n/10 The new prece-dence re-la-tion-ship among the op-er-a-tors
  []
 
 No file main.bbl.
-[3 <./images/constraintTree.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 341.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 341.
+[4]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 523.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 523.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 341.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 341.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 523.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 523.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 396DBD651D6B258AC73529CD1C2B2492;219.
+(rerunfilecheck)             Checksum: 99096389B862E40CCCE51CD694F394AD;415.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 341.
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 523.
  ) 
 Here is how much of TeX's memory you used:
- 29741 strings out of 493029
- 706522 string characters out of 6136233
- 888630 words of memory out of 5000000
- 32726 multiletter control sequences out of 15000+600000
+ 30054 strings out of 493029
+ 712507 string characters out of 6136233
+ 889562 words of memory out of 5000000
+ 33013 multiletter control sequences out of 15000+600000
  28282 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,20n,77p,1115b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,20n,77p,1115b,683s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
@@ -1495,10 +1560,10 @@ ive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/ur
 w/times/utmr8a.pfb>
-Output written on main.pdf (3 pages, 158424 bytes).
+Output written on main.pdf (4 pages, 170047 bytes).
 PDF statistics:
- 127 PDF objects out of 1000 (max. 8388607)
- 103 compressed objects within 2 object streams
- 17 named destinations out of 1000 (max. 500000)
- 50 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 154 PDF objects out of 1000 (max. 8388607)
+ 129 compressed objects within 2 object streams
+ 24 named destinations out of 1000 (max. 500000)
+ 74 words of extra memory for PDF output out of 10000 (max. 10000000)
 
