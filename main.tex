@@ -261,9 +261,10 @@ The paper is structured as follows. We present the method in Section~\ref{sec:me
 \section{Method}
 \label{sec:method}
 
-We looked into most of the benchmark scheduling problems prevailing in the operations research community, some examples are Nurse Rostering, Course Timetabling, Home Care Scheduling and Project Scheduling. Most of the constraints observed in these problems are non-linear in nature but share some kind of structure, so we did some deep dive and came up with a mathematical structure to represent most of these constraints. 
+Most of the constraints in the prevalant benchmark scheduling problems are non-linear in nature and share an inherent structure. In this paper, we first define a mathematical structure to represent these constraints and then define an algorithm to learn these structures efficiently. Thus automating the rigourous task of desiging and coding constraints to reach the solution.
+%We looked into most of the benchmark scheduling problems prevailing in the operations research community, some examples are Nurse Rostering, Course Timetabling, Home Care Scheduling and Project Scheduling. Most of the constraints observed in these problems are non-linear in nature but share some kind of structure, so we did some deep dive and came up with a mathematical structure to represent most of these constraints. 
 
-Let's see this running example before we define this structure. Consider a Nurse rostering model with the following variables.
+We introduce a running example before delving into more details. Consider a Nurse rostering model with the following variables.
 %
 \begin{align*}
   \TX_{n,s,d} = & \begin{cases}
@@ -297,14 +298,14 @@ Each term in the left hand side of Eq~\ref{eq:const} can be represented by:
 \label{eq:struct}
 	\bigotimes_{\textbf{S}}(\overline{\TX}, \overline{\TM}) = \sum_{\textbf{S}}\prod_{\TX,\TM \in \overline{\TX} \odot \overline{\TM}}\TX_{\TM}
 \end{equation}
-Here, $\odot$ is an element wise product, for example: {\mohit{needs fixing}}
+Here, $\odot$ is an element wise concatenation, for example: {\mohit{needs fixing}}
 \begin{equation*}
-    \{X_1,X_2\}\odot \{M_1,M_2\}=\{X_1\cdot M_1, X_2 \cdot M_2\}
+    \{X_1,X_2\}\odot \{M_1,M_2\}=\{(X_1, M_1), (X_2, M_2)\}
 \end{equation*}
 Taking $\overline{\TX}=\{\TX_{n,s,d}, \textbf{H}_{n}\}$, $\overline{\TM}=\{\{n,s,d\}, \{n\}\}$ and $\textbf{S}=\{n\}$ will give us the first term in Eq~\ref{eq:const}, i.e. 
 $\bigotimes_{\textbf{S}}(\overline{\TX}, \overline{\TM})=\sum_{n} \TX_{n,s,d} \times \textbf{H}_{n}$.
 \\
-Let $\mathbb{X}$ represents the set of all tensors, $\TP(\mathbb{X})$ represents the power set of $\mathbb{X}$ and $\TE \subseteq \TP(\mathbb{X})$, then the following inequality structure can be used to represent the kind of constraint we saw in Eq~\ref{eq:const}.
+Let $\mathbb{X}$ represents the set of all tensors, $\TP(\mathbb{X})$ represents the power set of $\mathbb{X}$ and $\TE \subseteq \TP(\mathbb{X})$, then the following inequality captures the type of constraint we saw in Eq~\ref{eq:const}.
 %Let $j$ represents the index set for $\TE$ and $i$ represents the index set for elements in \TE.
 %$J \subseteq \{1,2,...,|P|\}$.
 \begin{multline}
@@ -315,7 +316,7 @@ Each constraint in Eq~\ref{eq:struct} can be uniquely identified by the followin
 \begin{itemize}
 \item $\TE, \overline{\TM}_i,\textbf{S}_i, \TZ, \TM$
 \end{itemize}
-In other words, by enumerating through the various possible values of these variables, we can enumerate through all the possible constraints. For example, choosing the following assignments will give us the constraint represented by Eq~\ref{eq:const}
+For example, choosing the following assignments will give us the constraint represented by Eq~\ref{eq:const}
 \begin{align*}
 &E=\{(X,H),(X,M)\}\\
 &Z=R\\
@@ -323,7 +324,7 @@ In other words, by enumerating through the various possible values of these vari
 &S_{(X,H)}=S_{(X,M)}=\{n\}\\
 &M=\{s,d\}
 \end{align*}
-Enumerating through all the possible combinations is not a feasible solution as the number of combinations for this structure is huge and enumerating through all the possibilities will not scale for the real world problems. In this paper we define a two step solution to tackle this problem:
+By enumerating through the possible values of these variables, we can enumerate through all the possible constraints. However, that is not a feasible solution, as the number of combinations for this structure is huge and enumerating through all the possibilities will not scale for the real world problems. In this paper we define a two step solution to tackle this problem:
 
 \subsection{Signatures}
 Signatures are a pro active measure to refine the set of constraints to be enumerated. We define the following conditions which must be satisfied by a constraint in order for it to be a valid constraint. Let $N_y$ represents the dimension set of \TY
@@ -358,47 +359,50 @@ If we apply just the last two signatures to Eq~\ref{eq:struct}, the structure re
 \end{equation}
 
 \subsection{Intelligent Enumeration}
-This subsection presents an intelligent way to enumerate through the constraints represented by Eq~\ref{eq:struct}. First we make some assumptions to define a simple algorithm which gives an idea of how this method works, in the further subsections we keep on relaxing these assumptions and explain how the algorithm changes for the new structure.
-The assumptions we intially make are:
-\begin{itemize}
-\item Mod of the numbers in a tensor is always greater than or equal to 1
-\item Each tensor has only non-negative entry.
-\end{itemize}
-% With the first assumption in place and given the structure of the constraints that we enumerate using Eq~\ref{eq:struct}, we can safely assume that all the tensors have only positive numbers. This is because even if we have any negative data tensor \textbf{T}, we can transform it to \textbf{-T} for our algorithm without loosing any information as our equation considers both \textbf{T} and \textbf{-T} when enumerating through constraints.
-Combining both the assumptions we can say that each number in each tensor must be greater than or equal to 1. We use the following two properties to define an intelligent way to enumerate:
-
-\begin{equation}
-t_1 \not\le t \implies t_1 + t_2 \not\le t \quad \forall t_2 \geq 0
-\end{equation} 
-
-\begin{equation}
-t_1 \not\le t \implies t_1 * t_2 \not\le t \quad \forall t_2, s.t. |t_2| \geq 1
-\end{equation} 
-
-% \begin{equation}
-% t_1 \not\ge t \implies t_1 * t_2 \not\ge t \quad \forall t_2, s.t. |t_2| \le 1
-% \end{equation} 
 \begin{figure}[tb]
     \centering
 \includegraphics[width=0.3\textwidth]{images/constraintTree.png}
     \caption{\label{fig:constraintTree} Constraint Dependency Tree: The root represents the most general constraint and as we keep going down the constraints become more specific.}
 \end{figure}
-We use this idea to define a constraint dependency tree as shown in Fig~\ref{fig:constraintTree}. A directed edge between two nodes represents entailment. For example, in Fig~\ref{fig:constraintTree}, $C_2$ entails $C_1$ which means whenever $C_2$ is satisfied $C_1$ will also be satisfied, which also means if $C_1$ is not satisfied then $C_2$ is not satisfied either.
-\\
-There can be two approaches for enumeration: (1) Top Down or (2) Bottom Up.
+This subsection presents an intelligent way to enumerate through constraints based on the concept of logical entailment. We define a constraint dependency tree as shown in Fig~\ref{fig:constraintTree}. Each node in this tree represents costraint and a directed edge between two nodes represent entailment. For example, in Fig~\ref{fig:constraintTree}, $C_2$ entails $C_1$ which means whenever $C_2$ is satisfied $C_1$ will also be satisfied, which also means if $C_1$ is not satisfied then $C_2$ is not satisfied either.
+There are two ways to enumerate using this tree:
  
 \textbf{Top Down:} In the top down approach, we start with the most general constraint, if it's not satisfied then we don't need to check any of it's descendents. For example, in Fig~\ref{fig:constraintTree}, we start with checking the validity of $C_1$, if it is not satisfied we don't need to check any other constraints in the tree as none of them would be satisfied, and if it's not then we check each of it's children one by one and repeat the process.
 
 \textbf{Bottom Up:} Bottom up works on the similar idea as the top down approach, here we start with the most specific constraint, in our case it would be $C_5$ or $C_6$, if it is satisfied we don't need to check any ancestors of that constraint as it will definitely be satisfied, but if it's not satisfied we check each parent one by one and repeat the process.
 
-In this paper we are going to discuss top down approach, but we can easily transform the algorithm to consider bottom up approach. 
-
-In bottom up approach we always start with the most general constraint and if it's not satisfied we can safely discard all the constraints which are descendants of that constraint. We can easily represent any constraint using the set of variables defined earlier ($E, \overline{\TM}_i,S_{i}, Z, \TM$). So let's see how does the most specific constraint look like based on our assumptions and signatures.
+In this paper we are going to discuss top down approach, but we can easily transform the algorithm to consider the bottom up approach. 
+\\
+To build a constraint dependency tree, we define the entailment properties for the operations used while constructing a constraint using Eq~\ref{eq:struct}: Summation over terms($S_t$), summation over dimensions($S_d$), product($P$) and slicing($S$). Except slicing all three operations can be used to define entailment:
 \begin{itemize}
-\item $E=\phi$
-% \item $|l|=2 \quad \forall l \in E \bigcup F$ 
-% \item $S_{l} = \bigcup_{\TY \in l} M_{l,y} \quad \forall l \in E \bigcup F$
+\item $X \not\le Z \Rightarrow X + Y \not\le Z \quad \forall Y \geq 0$
+\item $X_{M} \not\le Z \Rightarrow X_{M'} \not\le Z \quad \forall M': M' \supset M \, and \, X \geq 0$
+\item $X \not\le Z \Rightarrow X * Y \not\le Z \quad \forall Y: Y \geq 1$
+\item $X + Y \not\le Z \Rightarrow X \not\le Z \quad \forall Y \le 0$
+\item $X_{M} \not\le Z \Rightarrow X_{M'} \not\le Z \quad \forall M': M' \subset M \, and \, X \le 0$
+\item $X * Y \not\le Z \Rightarrow X \not\le Z \quad \forall Y: Y \le -1$
 \end{itemize}
+
+
+To use these properties, we have to make some assumptions. We start by using the first three property to define a simple algorithm which gives an idea of how the algorithm works. Thereafter, we keep on relaxing the assumptions we made and explain how the algorithm changes for the revised structure to use the other properties given above. The first two properties can only be used if all the entries in the tensors are non-negative, while for the third one we need the values to be greater than or equal to 1. So for now we assume the values in each tensor to be greater than or equal to 1
+%So, the initial assumption is:
+%\begin{itemize}
+%\item Mod of the numbers in a tensor is always greater than or equal to 1
+%\item Each tensor has only non-negative entry.
+%\end{itemize}
+% With the first assumption in place and given the structure of the constraints that we enumerate using Eq~\ref{eq:struct}, we can safely assume that all the tensors have only positive numbers. This is because even if we have any negative data tensor \textbf{T}, we can transform it to \textbf{-T} for our algorithm without loosing any information as our equation considers both \textbf{T} and \textbf{-T} when enumerating through constraints.
+%Combining both the assumptions we can say that each number in each tensor must be greater than or equal to 1. 
+
+% \begin{equation}
+% t_1 \not\ge t \implies t_1 * t_2 \not\ge t \quad \forall t_2, s.t. |t_2| \le 1
+% \end{equation} 
+
+To use the bottom up approach, we first define what the most specific constraints (the root nodes) look like and then define the properties a child node has to satisfy. A node is represented by a set of variables which can uniquely define a constraint : ($E, \overline{\TM}_i,S_{i}, Z, \TM$). Based on our assumptions and signatures the most general nodes only have to satisfy one property, which is $E=\phi$.
+%\begin{itemize}
+%\item $E=\phi$
+%% \item $|l|=2 \quad \forall l \in E \bigcup F$ 
+%% \item $S_{l} = \bigcup_{\TY \in l} M_{l,y} \quad \forall l \in E \bigcup F$
+%\end{itemize}
 Given two nodes $\{E, \overline{\TM}_i,S_{i}, Z, \TM\}$ and $\{E', \overline{\TM}'_i,S'_{i}, Z', \TM' \}$. The later will be a child of the former if and only if at least one of the following properties is satisfied keeping everything else unchanged.
 \begin{itemize}
 % \item $|F'| < |F|$
@@ -408,7 +412,7 @@ Given two nodes $\{E, \overline{\TM}_i,S_{i}, Z, \TM\}$ and $\{E', \overline{\TM
 \end{itemize}
 
 \subsection{Total Order}
-With the tree structure defined above we can go ahead and start searching starting from the most specific layer and moving down layer by layer. The only problem is that multiple nodes can have the same child. 
+With the tree structure defined above we can go ahead and start searching starting from the most general layer and moving down layer by layer. The only problem is that multiple nodes can have the same child. 
 For example, consider 3 tensors $A, B$ and $C$ each of dimension $m*n$. There are multiple possibilities for the most general node:
 \begin{multline*}
     0 \le A,\, 0 \le B,\, 0\le C,\, 
@@ -416,7 +420,7 @@ For example, consider 3 tensors $A, B$ and $C$ each of dimension $m*n$. There ar
     0 \le A_m,\, 0 \le B_m,\, 0\le C_m,\,
     0 \le A_n,\, 0 \le B_n,\, 0\le C_n
 \end{multline*}
-Consider a small part of the tree using the first node:
+Consider a small part of the lattice using the first node:
 \begin{tikzpicture}[sibling distance=.25cm]
 \Tree [.$0\le A$
         [.$B\le A$
@@ -425,11 +429,11 @@ Consider a small part of the tree using the first node:
 \draw (CA.south) -- (BC.north);
 \end{tikzpicture}
 \\
-We can see that multiple nodes can take us to the same children. To break this symmetry we define an ordering on all the variables as well as operations performed to get to the child node, this will ensure that a node will never have two parents, we will prove it later.
+We can see that multiple nodes can take us to the same children. To break this symmetry we define an ordering that will ensure that a node can have only one parent.
 \begin{itemize}
     \item A random ordering is defined for the tensors, for instance we can define $A \prec B \prec C$.
     \item Similarly we define the ordering of dimensions for each tensor, with the first dimension preceding the second and so on. In our example it would be $m \prec n$ for each tensor.
-    \item The final ordering is defined on the operations performed to reach the child node. $\text{Summation over terms} \prec \text{Product over terms} \prec \text{Summation over dimensions}$
+    \item The final ordering is defined on the operations performed to reach the child node: $\text{Summation over terms} \prec \text{Product over terms} \prec \text{Summation over dimensions}$
 \end{itemize}
 By using these orderings when generating a child for a node we can remove the redundancy. 
 For each node we have a list (L) of highest order tensor, dimension and operation used on the root node to reach that node. For our example above, $L(B+C \le A)=\{C,\text{summation over terms}\}$
