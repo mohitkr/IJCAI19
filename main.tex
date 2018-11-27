@@ -327,6 +327,7 @@ For example, choosing the following assignments will give us the constraint repr
 By enumerating through the possible values of these variables, we can enumerate through all the possible constraints. However, that is not a feasible solution, as the number of combinations for this structure is huge and enumerating through all the possibilities will not scale for the real world problems. In this paper we define a two step solution to tackle this problem:
 
 \subsection{Signatures}
+\label{subsec:signatures}
 Signatures are a pro active measure to refine the set of constraints to be enumerated. We define the following conditions which must be satisfied by a constraint in order for it to be a valid constraint. Let $N_y$ represents the dimension set of \TY
 \begin{itemize}
             \item $M_{l,y} \subseteq N_y \quad \forall l \in E \bigcup F$
@@ -359,12 +360,13 @@ If we apply just the last two signatures to Eq~\ref{eq:struct}, the structure re
 \end{equation}
 
 \subsection{Intelligent Enumeration}
+\label{subsec:intelEnum}
 \begin{figure}[tb]
     \centering
 \includegraphics[width=0.3\textwidth]{images/constraintTree.png}
     \caption{\label{fig:constraintTree} Constraint Dependency Tree: The root represents the most general constraint and as we keep going down the constraints become more specific.}
 \end{figure}
-This subsection presents an intelligent way to enumerate through constraints based on the concept of logical entailment. We define a constraint dependency tree as shown in Fig~\ref{fig:constraintTree}. Each node in this tree represents costraint and a directed edge between two nodes represent entailment. For example, in Fig~\ref{fig:constraintTree}, $C_2$ entails $C_1$ which means whenever $C_2$ is satisfied $C_1$ will also be satisfied, which also means if $C_1$ is not satisfied then $C_2$ is not satisfied either.
+This subsection presents an intelligent way to enumerate through constraints based on the concept of logical entailment. We define a constraint dependency tree as shown in Fig~\ref{fig:constraintTree}. Each node in this tree represents costraint and a directed edge between two nodes represent entailment. For example, in Fig~\ref{fig:constraintTree}, $C_2$ entails $C_1$ which means whenever $C_2$ is satisfied, $C_1$ will also be satisfied, which also means if $C_1$ is not satisfied then $C_2$ is not satisfied either.
 There are two ways to enumerate using this tree:
  
 \textbf{Top Down:} In the top down approach, we start with the most general constraint, if it's not satisfied then we don't need to check any of it's descendents. For example, in Fig~\ref{fig:constraintTree}, we start with checking the validity of $C_1$, if it is not satisfied we don't need to check any other constraints in the tree as none of them would be satisfied, and if it's not then we check each of it's children one by one and repeat the process.
@@ -373,7 +375,7 @@ There are two ways to enumerate using this tree:
 
 In this paper we are going to discuss top down approach, but we can easily transform the algorithm to consider the bottom up approach. 
 \\
-To build a constraint dependency tree, we define the entailment properties for the operations used while constructing a constraint using Eq~\ref{eq:struct}: Summation over terms($S_t$), summation over dimensions($S_d$), product($P$) and slicing($S$). Except slicing all three operations can be used to define entailment:
+To build a constraint dependency tree, we define the entailment properties for the operations used in Eq~\ref{eq:struct}: Summation over terms($S_t$), summation over dimensions($S_d$), product($P$) and slicing($S$). Except slicing all three operations can be used to define entailment:
 \begin{itemize}
 \item $X \not\le Z \Rightarrow X + Y \not\le Z \quad \forall Y \geq 0$
 \item $X_{M} \not\le Z \Rightarrow X_{M'} \not\le Z \quad \forall M': M' \supset M \, and \, X \geq 0$
@@ -397,13 +399,13 @@ To use these properties, we have to make some assumptions. We start by using the
 % t_1 \not\ge t \implies t_1 * t_2 \not\ge t \quad \forall t_2, s.t. |t_2| \le 1
 % \end{equation} 
 
-To use the bottom up approach, we first define what the most specific constraints (the root nodes) look like and then define the properties a child node has to satisfy. A node is represented by a set of variables which can uniquely define a constraint : ($E, \overline{\TM}_i,S_{i}, Z, \TM$). Based on our assumptions and signatures the most general nodes only have to satisfy one property, which is $E=\phi$.
+To use the top down approach, we first define what the most general constraints (the root nodes) look like and then define the properties a child node has to satisfy. A node is represented by a set of variables which can uniquely define a constraint : ($E, \overline{\TM}_i,S_{i}, Z, \TM$). Based on our assumptions and signatures the most general nodes only have to satisfy one property, which is $E=\phi$.
 %\begin{itemize}
 %\item $E=\phi$
 %% \item $|l|=2 \quad \forall l \in E \bigcup F$ 
 %% \item $S_{l} = \bigcup_{\TY \in l} M_{l,y} \quad \forall l \in E \bigcup F$
 %\end{itemize}
-Given two nodes $\{E, \overline{\TM}_i,S_{i}, Z, \TM\}$ and $\{E', \overline{\TM}'_i,S'_{i}, Z', \TM' \}$. The later will be a child of the former if and only if at least one of the following properties is satisfied keeping everything else unchanged.
+Given two nodes $\{E, \overline{\TM}_i,S_{i}, Z, \TM\}$ and $\{E', \overline{\TM}'_i,S'_{i}, Z', \TM' \}$. The later will be a child of the former if and only if one and only one of the following properties is satisfied keeping everything else unchanged.
 \begin{itemize}
 % \item $|F'| < |F|$
 \item $E' \supseteq E$, increase the summation over terms.
@@ -412,6 +414,7 @@ Given two nodes $\{E, \overline{\TM}_i,S_{i}, Z, \TM\}$ and $\{E', \overline{\TM
 \end{itemize}
 
 \subsection{Total Order}
+\label{subsec:totOrder}
 With the tree structure defined above we can go ahead and start searching starting from the most general layer and moving down layer by layer. The only problem is that multiple nodes can have the same child. 
 For example, consider 3 tensors $A, B$ and $C$ each of dimension $m*n$. There are multiple possibilities for the most general node:
 \begin{multline*}
@@ -429,20 +432,22 @@ Consider a small part of the lattice using the first node:
 \draw (CA.south) -- (BC.north);
 \end{tikzpicture}
 \\
-We can see that multiple nodes can take us to the same children. To break this symmetry we define an ordering that will ensure that a node can have only one parent.
+Multiple nodes in the figure above can take us to the same children. To break this symmetry we define three orderings and modify our algorithm to ensure that a node doesn't have more than one parent.
 \begin{itemize}
-    \item A random ordering is defined for the tensors, for instance we can define $A \prec B \prec C$.
+    \item A random ordering is defined for the tensors, in the example above we can define $A \prec B \prec C$.
     \item Similarly we define the ordering of dimensions for each tensor, with the first dimension preceding the second and so on. In our example it would be $m \prec n$ for each tensor.
     \item The final ordering is defined on the operations performed to reach the child node: $\text{Summation over terms} \prec \text{Product over terms} \prec \text{Summation over dimensions}$
 \end{itemize}
-By using these orderings when generating a child for a node we can remove the redundancy. 
-For each node we have a list (L) of highest order tensor, dimension and operation used on the root node to reach that node. For our example above, $L(B+C \le A)=\{C,\text{summation over terms}\}$
-To generate a child for this node, one can only use a tensor, dimension or operation which has higher or equal order than the highest order tensor, dimension and operation in L.
+%By using these orderings when generating a child for a node we can remove the redundancy. 
+For each node we create a list (L) of highest order tensor, dimension and operation used on the root node to reach that node. For our example above, $L(B+C \le A)=\{C,\text{summation over terms}\}$
+To generate a child for this node, one can only use a tensor, dimension or operation which has higher or equal precedence compared to the items in L.
 This rule eliminates redundancy from the graph. For example in the figure above, now $C\le A$ cannot generate $B+C\le A$ because once we add $C$ to the inequality we can't add $B$ as $B \prec C$
 
 \subsubsection{More Complex Setting}
 %\textbf{More Complex Setting:} 
-Let us now see what happens if we remove the first assumption which was "mod of the numbers in a tensor is all greater than or equal to one". In this case we divide our tensor set into three categories: (1) Where mod of each number is greater than or equal to 1, denoted by $P_1$, (2) Where mod of each number is less than or equal to 1, denoted by $P_2$, (3) Where mod of some numbers are less than 1 and some are greater than 1, denoted by $P_3$.
+In Section~\ref{subsec:intelEnum}, we assumed the numbers in each tensors to be greater than or equal to one. Now we will relax this assumption little bit to the following: Each tensor has either all numbers greater than or equal to 0.
+%Let us now see what happens if we remove the first assumption which was "mod of the numbers in a tensor is all greater than or equal to one". 
+We divide the tensors into three categories: (1) Where mod of each number is greater than or equal to 1, denoted by $P_1$, (2) Where mod of each number is less than or equal to 1, denoted by $P_2$, (3) Where mod of some numbers are less than 1 and some are greater than 1, denoted by $P_3$.
 \\
 Taking a product with any tensor in $P_1$ will give us a child node, while multiplying with a tensor in $P_2$ will give us a parent node and a product with a tensor in $P_3$ will give us a sibling.
 % We split the product operations into three different operations: We call it $Prod_1$ if the tensor used is from $P_1$, $Prod_1$ if the tensor used is from $P_2$ and $Prod_3$ for tensors from $P_3$.  
@@ -456,7 +461,7 @@ $\text{Summation over terms} \prec \text{Removing a bad tensor} \prec \text{Mult
 
 
 \subsection{Generalization}
-Before discussing the removal of the second assumption let us consider a generalization of the structure defined in Eq~\ref{eq:struct}. The main idea behind this generalization is to be able to use negative tensors and subtractions. If we take Eq~\ref{eq:struct} and allow the possibility of taking negation of a tensor we get the following generalization:
+Before relaxing the assumptions further we define a generalization of the structure defined in Eq~\ref{eq:struct}. The main idea behind this generalization is to be able to use negative tensors and subtractions. If we take Eq~\ref{eq:struct} and allow the possibility of taking negation of each tensor we get the following generalization:
 %\begin{equation}
 %	\displaystyle\sum\limits_{\overline{\TX}_i \in \TE}\bigotimes_{\textbf{S}_i}(\overline{\TX}_i,\overline{\TM}_i) \le \TZ_{M}
 %\end{equation}
@@ -490,8 +495,9 @@ Before discussing the removal of the second assumption let us consider a general
 %	\displaystyle\TZ_{M} \le \sum\limits_{\overline{\TX}_i \in \TE}\bigotimes_{\textbf{S}_i}(\overline{\TX}_i,\overline{\TM}_i) - 
 %	\sum\limits_{\overline{\TX}'_i \in \TE'}\bigotimes_{\textbf{S}'_i}(\overline{\TX}'_i,\overline{\TM}'_i) \le \TZ'_{M'}\\ \forall \bigcup_{E \bigcup E'}(\bigcup_{\TM \in \overline{\TM}_i} \TM / \textbf{S}_i) \bigcup M  \bigcup M' 
 %\end{multline}
-For now let us focus on learning constraints defined by the structure in Eq~\ref{eq:general1}, we will update our algorithm later to include Eq~\ref{eq:general2}.   
-If a tensor \TX is in any element of \TE it's being considered as is while if it belongs to any element of \TE' it's negation is being considered. \TX can also belong to both \TE and \TE', in which case it's being considered in both the states positive and it's negation. 
+Here we update our algorithm to learn constraints defined by the structure in Eq~\ref{eq:general1}, we will update our algorithm later to include Eq~\ref{eq:general2}.   
+If a tensor \TX is in any element of \TE it's being considered as is while if it belongs to any element of \TE' it's negation is being considered. 
+%\TX can belong to both \TE and \TE', in which case it's being considered in both the states positive and it's negation. 
 Now let's say we have a tensor in our data set with all numbers non-positive, then we can take a negation and make it non-negative and use this transformed tensor in our algorithm without any loss of information because the enumeration is going to consider both the tensor and it's negation as explained above.
 So we can relax one more assumption we had, we assumed that each tensor must have all numbers non-negative, but now we can also have tensors that have all numbers non-positive. To do the intelligent enumeration, we will have to re-define the concept of most general node and the rules to go to a child node.
 The most general node will have the following property now:
