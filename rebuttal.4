@@ -1,0 +1,72 @@
+> This article deals with the case of learning polynomial constraints from
+> examples. The authors present ARNOLD, an algorithm for acquiring constraints of
+> this type for Integer Programming. They introduce a new langage for describing
+> constraints, the ARNOLD algorithm and evaluate it on various problem classes.
+>
+> ARNOLD is designed to learn polynomial inequalities from positive examples.
+> Starting from given parameters \mathcal{V} the decisions variables and
+> \mathcal{C} the constants (input data), ARNOLD recursively specialises
+> constraints by adding terms, index to a term, adding tensor to a product,
+> removing tensor from a product, etc.
+>
+> These operations are called refinement in the sense that they are made to
+> specify a given constraint c. The set of tensors is extracted from \mathcal{V}
+> and \mathcal{C} and classified into 3 different types: good tensors, bad
+> tensors and ugly tensors.
+>
+> An objective of ARNOLD is to remove bad tensors that have introduced by
+> specialisation and adding good tensors.
+>
+> My main interrogations are the following ones:
+>
+> -- The first one is about ugly tensors. It is not clear what an ugly tensor is,
+> relatively to good and bad ones, its definition is quite fuzzy. Moreover, they
+> require to be managed manually which may be a problem, but this is not
+> discussed in the article.
+
+Mohit: Ugly tensors are those that have at least one value strictly greater
+than 1 and one value between 0 and 1, i.e. $\exists \; u_1, u_2 \in U \ s.t \;
+u_1>1 \land 0\le u_2<1$. In the section (Dealing with Ugly Tensors) we
+mentioned that we manually generate constraints with ugly tensors, by which we
+meant that we are not enumerating intelligently using general to specific
+search for checking the satisfiability of constraints which have ugly tensors.
+This leads to increase in time taken to search the whole space, but we still
+consider all the constraints possible using ugly tensors as well. All our
+experiments included enumeration through the constraint space including ugly
+tensors. Although this does not impact much as the frequency of ugly tensors
+appearing is quite low as is quite evident from Table 2, which shows that most
+of the benchmark problems had no ugly tensors. We included these tensors in our
+algorithm to be able to handle the rare cases of them being appearing in a
+problem.
+
+> -- Second, it seems that the ModelSeeker is closer to ARNOLD that authors
+> think. Indeed, like ARNOLD, it learns on positive examples (but can also learn
+> from negative ones) and is able to learn structured constraints (like
+> AllDifferent or scalar product), like the ones that can stated with the
+> MiniZinc language. I would have expected a comparison between the two
+> approaches in term of precision and recall. Note that I think ARNOLD is also
+> easier to implement and less system dependant since it learn polynomial
+> inequalities.
+>
+> In conclusion, the article proposes an elegant way to learn polynomial
+> inequalities from few positive examples. The ARNOLD algorithm is simple and
+> rely on well explained refine function. The empirical evaluation is convincing
+> either in term of quality of integer problems learned and also in term of
+> performances.
+>
+> -- Why not using the MiniZinc language to express and manipulate constraint?
+> MiniZinc could be extended, if needed, and that would avoid declaring a new
+> language.
+>
+> -- The notation is sometimes confusing. For instance, X refers to tensors of
+> variables in the beginning, then simply tensors. The same goes with V which
+> refers to tensors of variables then solutions.
+>
+> -- In Table 2, it would have interesting to know what is the number of
+> variables: as far as I understand |V| does not indicate the number of variable
+> but the tensor first dimension (see for instance the knapsack problem wherein
+> the number of variables corresponds to the number of objects to keep). In
+> addition, selected instances for each problem is a relevant information. \item
+> Do the authors have any idea how s and p are related to precision and recall ?
+> In addition, it would have been interesting in seeing what (2,2) would result
+> in.

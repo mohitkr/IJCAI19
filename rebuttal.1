@@ -1,0 +1,42 @@
+Thank you for your encouraging review.
+
+On the assumptions:
+
+1) Polynomial IP: true, we only tackle polynomial IP, which is however
+extremely expressive, as you noted;
+
+2) Tensor bias: true, common special tensors must be pre-defined.  Many IPs use
+the same special constants (identity, all-ones, all-zeros, etc.), so the user
+does not necessarily need to tweak it.  Expert users can stil be allowed to
+modify the bias by, e.g., removing tensors that do not occur in the domain.
+
+[Stefano: @Mohit: what is our tensor bias?]
+
+3) Dealing with ugly or mixed pos/neg tensors: true.  These cases are difficult
+to deal with but they are also very infrequent.  For instance, they do not
+occur even once in the practical IPs we looked at.  (Stefano: @Mohit: right? if
+so, add ref to IP dataset.)
+
+4) Scalability is limited: Arnold addresses the perhaps worst offender (namely,
+the size of the set of candidate constraints) by using general-to-specific
+search, but indeed scalability is still limited.  Techniques used for structure
+learning of graphical models (e.g. grafting) can be used to improve on this; we
+plan to look into it soon.
+
+We will state all assumptions upfront in the problem statement section.  Out of
+all assumptions, the only limiting one is 4---but, again, reasonably sized IPs
+can already be learned;  further, even if learning is expensive, once learned,
+the IP can be used many times, so it may still make sense to learn larger IPs
+overall.
+
+> -- First, how does thee approach fare when only a few solutions are available
+> (i.e. less than 125)  This is relevant to practical applicability (the fewer
+> solutions are needed, the easier it will to employ the approach).
+
+Stefano: @Mohit: please comment on this.
+
+> -- Second, how interpretable are the extracted models for human expert This
+> is relevant for experts interested in obtaining a baseline model than could
+> then be manually adjusted.
+
+Stefano: @Mohit: please comment on this.

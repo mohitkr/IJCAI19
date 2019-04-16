@@ -1,0 +1,59 @@
+> The paper presents Arnold, an algorithm that does linear constraint aquisition
+> from positive examples. The input is given by a collection of variable tensors
+> and constant tensors that represent the unknown and the data associated to an
+> instance. The output is a set of linear constraints, as specialized as
+> possible, that satisfy all examples.
+>
+> The paper is very well written with simple notation. It is easy to read, even
+> though this is a complex problem. The algorithm is original, sufficiently
+> simple to be easily implemented by others, and offer good performandes.
+>
+> In the literature review presented in the introduction, the work by Emilie
+> Picard-Cantin et al. [CP 2016, CP 2017] could be mentionned. Her work does
+> exactly the oppositite: the (global) constraints are known, the algorithm
+> learns the constants.
+>
+> At the very beginning of the fourth page, the equations let suppose that $sum_i
+> P_{i,j}$ is equal to $sum_j P_{i,j}$ since they are both equal to ($P_{11} +
+> P_{12}, P_{21} + P_{22}$).
+
+Mohit: thanks for pointing out this error, indeed it should be ($P_{11} +
+P_{21}, P_{12} + P_{22}$), we will fix this.
+
+> The section about "Dealing with ugly tensors" is a little bit vague, compared
+> to the rest of the paper. What do you mean by "we manually generate
+> constraints". Is it really manually done or is it systematically and
+> automatically performed by your algorithm?
+
+Mohit: In the section ``Dealing with Ugly Tensors'' we mentioned that we
+manually generate constraints with ugly tensors, by which we meant that we are
+not enumerating intelligently using general to specific search for checking the
+satisfiability of constraints which have ugly tensors. The proposed algorithm
+still considers all the constraints with ugly tensors, the only thing that
+changes is that the presence of ugly tensors increase the time taken to search
+the whole constraint space. Although this does not impact much as the frequency
+of ugly tensors appearing in a problem is quite low as is quite evident from
+Table 2, which shows that most of the benchmark problems had no ugly tensors.
+We included these tensors in our algorithm to be able to handle the rare cases
+of them being appearing in a problem. All our experiments in the paper included
+enumeration through the constraint space including ugly tensors.
+
+> Some figures and tables have no references in the texft.
+>
+> Even if other systems, mentionned in the releated work, present limitations, I
+> would have expected to see how well or how poorly they perform compared to your
+> algorithm.
+
+Mohit: we understand that comparing our algorithm with related works can make
+our case more strong, there are two reasons for not doing it:
+
+> -- The theory of the algorithms in the related work section makes it quite
+> clear that most of the constraints being captured by ARNOLD is out of the scope
+> for these algorithms.
+>
+> -- Due to the point mentioned above we did not have access to the experimental
+> results of the related algorithms on the benchmark problems we tackled in our
+> paper. For many algorithms the codes are not open sourced, which makes it
+> really hard to first implement and then compare.
+>
+> Overall, I consider that this is very good paper
