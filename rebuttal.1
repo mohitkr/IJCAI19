@@ -1,0 +1,65 @@
+> This paper presents an approach, inspired by ideas from Constraint Acquisition
+> and (to a lesser extent) Inductive Logic Programming to learn Polynomial
+> Integer Programming models from a set of solutions. The approach relies on a
+> fixed collection of tensors representing constants and variable, which are
+> combined via a tree search method to form terms (i.e. monomial with
+> marginalized dimensions) and constraints (i.e. polynomial inequalities). Given
+> a set of pre-defined limits on how specific the learnt model can be (i.e.
+> number of tensors in a terms and maximum number of terms in a constraint), the
+> goal of the proposed model is to find a maximally specific model that is
+> compatible with all the available solutions. In particular, at each node of the
+> search space the parent collection of constraint is refined (via a number of
+> possible operations), and the first model that is compatible with all the
+> available solutions is returned.
+>
+> The method is tested on small-scale benchmarks from the Operations Research and
+> Constraint Programming domain. The results are promising in terms of accuracy
+> and recall, but hint at limited scalability.
+>
+> I think this is an interesting paper: compared to previous Constraint
+> Acquisition approaches, tackling (Polynomial) Integer Programming provides the
+> main advantage of having a much better defined structure, which allows to model
+> a wide range of problems with a very limited set of constraint types. This
+> property is the first that makes the proposed approach particularly
+> interesting, the second being its reliance on just positive examples (i.e.
+> feasible solutions). Together, these feature make the proposed method stand out
+> for its practical applicability compared to related approaches.
+>
+> Still, the work is a first step and presents some important limitations. It
+> would do the paper much good to state those as clearly and as early as
+> possible: currently, several key assumptions and intuitions are scattered in
+> the text, and therefore somewhat easy to miss. In particular, the authors
+> should stress as early as possible that:
+>
+> -- They target non-linear $polynomial$ integer programming
+>
+> -- Their approach does not require a constraint bias, but it does require a
+> $tensor$ bias (i.e. a predefined pool of variables and constants to work with).
+> This may be troublesome for models that require some non-trivial "artificial"
+> tensors that are not connected to physical entities (e.g. identity matrix,
+> permutation matrices, etc.)
+>
+> -- Not every tensor is supported, and in particular dealing with some tensors
+> (ugly, mixed positive/negative) requires special care and/or manual
+> intervention
+>
+> -- The approach scalability is still limited
+>
+> Some of such assumption are likely to reduce considerably the practical
+> applicability of the approach, but stating them at least points a reader
+> interested in follow-up works in th most relevant research directions.
+>
+>
+> I appreciated the clear presentation of the considered scientific questions in
+> the experimental result section, and I think the work does a good job at
+> addressing them. There are however a couple of important points that are not
+> mentioned, but are nevertheless important/intriguing:
+>
+> -- First, how does thee approach fare when only a few solutions are available (i.e. less than 125)?
+>
+> -- Second, how interpretable are the extracted models for human expert
+>
+> The first question is relevant to practical applicability (the fewer solutions
+> are needed, the easier it will to employ the approach). The second one is
+> relevant for experts interested in obtaining a baseline model than could then
+> be manually adjusted.
